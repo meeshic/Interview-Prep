@@ -34,54 +34,37 @@
  *     TreeNode(int x) { val = x; }
  * }
  */
+// refactored, clean, faster version
 class Solution {
     public TreeNode buildTree(int[] preorder, int[] inorder) {
-        if(preorder.length == 0 || inorder.length == 0) return null;
+        if(preorder.length == 0) return null;
         
-        TreeNode toRight = null;
         Deque<TreeNode> stack = new ArrayDeque<TreeNode>();
-        int preIndex = 0;
-        int inIndex = 0;
+        TreeNode toRight = null;
+        int inIndex=0;
         
         TreeNode root = new TreeNode(preorder[0]);
         stack.addFirst(root);
         
-        while(preIndex < preorder.length && inIndex < inorder.length){
-            if(toRight == null){
-                TreeNode leftNode = new TreeNode(preorder[preIndex]);
-                // reached leftmost node, so now need to find right node if exists
-                if(inorder[inIndex] == preorder[preIndex]){
-                    toRight = leftNode;
+        //Note: begin with index 1 to avoid adding root to stack again
+        for(int preIndex=1; preIndex<preorder.length; preIndex++){
+            //find node with right subtree
+            if(!stack.isEmpty() && stack.peek().val == inorder[inIndex]){
+                while(!stack.isEmpty() && stack.peek().val == inorder[inIndex]){
+                    toRight=stack.poll();
+                    inIndex++;
                 }
-                // if not root, add curr node (already added root at start)
-                if(preIndex != 0){
-                    stack.peek().left = leftNode;
-                    stack.addFirst(leftNode);
-                }
-                preIndex++;
+                
+                TreeNode rightNode = new TreeNode(preorder[preIndex]);
+                toRight.right = rightNode;
+                stack.addFirst(rightNode);
             }
             
-            // add right node
+            //build left subtree
             else{
-                while(!stack.isEmpty() && (inorder[inIndex] == stack.peek().val)){
-                    toRight = stack.poll();
-                    inIndex++;
-                }
-                
-                if(inorder[inIndex] == preorder[preIndex]){
-                    toRight.right = new TreeNode(inorder[inIndex]);
-                    toRight = toRight.right;
-                    inIndex++;
-                }
-                
-                else{
-                    TreeNode rightNode = new TreeNode(preorder[preIndex]);
-                    toRight.right = rightNode;
-                    stack.addFirst(rightNode);
-                    toRight = null;
-                }
-                
-                preIndex++;
+                TreeNode leftNode = new TreeNode(preorder[preIndex]);
+                stack.peek().left = leftNode;
+                stack.addFirst(leftNode);
             }
         }
         
