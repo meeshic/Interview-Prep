@@ -66,3 +66,58 @@ Algorithm:
         > the window size at end at of each iteration is <= p.length()
         > count is only changed when it applies to the current potential anagram
 */
+
+
+/*
+Naive Brute Force Approach:
+class Solution {
+    public List<Integer> findAnagrams(String s, String p) {
+        List<Integer> output = new ArrayList<Integer>();
+        if(s == null || s.length() == 0 || p == null || p.length() == 0) return output;
+        
+        int begin=0;
+        int end=0;
+        
+        HashMap<Character, Integer> freq = new HashMap<>();
+        for(char c : p.toCharArray()){
+            int index = (freq.get(c) != null) ? freq.get(c) : 0;
+            freq.put(c, ++index);
+        }
+        
+        while(end < s.length()){
+            char current = s.charAt(end);
+            //found match
+            if(freq.get(current) != null){
+                if(freq.get(current) > 0){
+                    freq.put(current, freq.get(current)-1);
+                    end++;
+                    
+                    //found anagram
+                    if(end-begin == p.length()){
+                        output.add(begin);
+                        if(freq.get(s.charAt(begin)) != null)
+                            freq.put(s.charAt(begin), freq.get(s.charAt(begin))+1);
+                        begin++;
+                    }
+                }
+                else{
+                    if(freq.get(s.charAt(begin)) != null)
+                        freq.put(s.charAt(begin), freq.get(s.charAt(begin))+1);
+                    begin++;
+                }
+            }
+            //found no match
+            else{
+                //move begin to start of new potential anagram segment
+                while(begin<=end){
+                    if(freq.get(s.charAt(begin)) != null)
+                       freq.put(s.charAt(begin), freq.get(s.charAt(begin))+1);
+                    begin++; 
+                }
+                end++;
+            }
+        }
+        return output;
+    }
+}
+*/
