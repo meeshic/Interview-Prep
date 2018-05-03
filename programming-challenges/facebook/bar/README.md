@@ -1,6 +1,8 @@
 Bar Problem
 ============
 
+* Solution explanations found in Solution.txt
+
 N friends are playing a game. Each of them has a list of numbers in front of himself.
 
 Each of N friends chooses a number from his list and reports it to the game administrator. Then the game administrator sorts the reported numbers and shouts the K-th largest number.
