@@ -1,4 +1,6 @@
 - Note: M = N*m_ai, the size of the input where ma_i = max(a_i), a_i <= N
+- Solution 2/3 based off this solution: https://stackoverflow.com/questions/12669102/what-algorithm-can-be-used-here
+- ^ However, all code + complexity was written by myself (not copied+pasted)
 
 Solution 1:
 	- Algorithm:
