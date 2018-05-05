@@ -1,0 +1,47 @@
+- Note: M = N*m_ai, the size of the input where ma_i = max(a_i), a_i <= N
+
+Solution 1:
+	- Algorithm:
+		- Scan input
+		- Recursively produce all permutations from given N sets(# of permutations = a_i ^ N)
+		- Sort permutations, find K-th largest number, and add to hashset of output
+		- Output = output hashset size
+	- Complexity:
+		- Time: O((ma_i^N)log(ma_i^N)) <= O((N^N)log(N^N)), quite high due to creating ALL permutations AND sorting
+			> scan input: O(M)
+			> helper func: O((ma_i^N)log(ma_i^N)), from ma_i^N * (ma_i^N)log(ma_i^N) to create permutations & sort them
+		- Space: O(M)
+			> O(N): max # of frames on recursive call stack
+			> O(M): input read in and stored
+
+Solution 2:
+	- Algorithm:
+		- Main logic: In order for a number to be shoutable, it must have N-K numbers larger and K-1 numbers smaller than it.
+		- Scan input and sort sets as they are read
+		- Iterate through each item in the sets and compare it against the min&max of the other sets to decide if it is shoutable.
+			Count the number of sets with definite smaller/larger numbers to find if there are N-K larger & K-1 smaller numbers.
+			The sets with numbers both smaller AND larger numbers than the current item will be ignored in the counting.
+			At the end of searching through all sets on the current item, if the number of definite sets with numbers all smaller 
+			than current item > K-1 or if the number of definite sets with numbers all larger than current item > N-K, current item
+			is NOT shoutable.
+	- So, the time complexity has been brought down to a polynomial time.
+	- Complexity:
+		- Time: O(M*N + MlogM), O(M*N) for when M is very, very big
+			> scan and sort input: O(MlogM)
+			> helper func: O(M*N)
+				>> O(M * N): iterate through each element and compare against min&max of N sorted lists
+		- Space: O(M)
+			> O(M): input read in and stored
+			> size of list used to store shoutable numbers has to be <= M
+
+Solution 3:
+	- Same approach as Solution 2 only that instead of sorting the lists and storing them, just calculate the min/max per set and store them.
+	- The parsing and storing of input is much faster (cut down from quasilinear time to linear time of calculating just the min/max)
+	- Complexity:
+		- Time: O(M*N)
+			> scan input: O(M)
+			> helper func: O((N^2)*m_ai) = O(M*N)
+		- Space: O(M)
+			> O(M): input read in and stored
+			> O(2*N): store min/max of each set
+			> size of list used to store shoutable numbers has to be <= M
